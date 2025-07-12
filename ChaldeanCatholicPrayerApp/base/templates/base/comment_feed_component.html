@@ -1,0 +1,37 @@
+         {% for comment in comments %}
+         {% load static %}
+        <div class="roomListRoom">
+        <div class="roomListRoom__content">
+            <a href="{% url 'room'  comment.room.id %}">{{comment.body}}</a>
+            <p>
+            Comment was made regarding {{comment.room}}
+            </p>
+        </div>
+        <div class="roomListRoom__meta">
+            <a href="{% url 'room'  comment.room.id %}" class="roomListRoom__joined">
+        <div class="header__logo">
+            <img src="{% static 'images/clock.svg' %}" alt="clock icon" />
+        </div>
+
+        <style>
+            .header__logo{
+                display: flex;
+                align-items: center;
+            }
+
+            .header__logo img{
+                height: 25px;
+                width: auto;
+                object-fit: contain;
+                margin-right: 0px;
+            }
+        </style>
+            This comment was made {{comment.created|timesince}} ago
+            </a>
+        </div>
+        </div>
+         {% empty %}
+        <p>This user has not made any comments yet.</p>
+    {% endfor %}
+
+<div>

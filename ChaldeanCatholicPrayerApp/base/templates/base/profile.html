@@ -1,0 +1,58 @@
+{% extends "main.html" %}
+{% load static %}
+
+
+{% block content %}
+  <main class="profile-page layout layout--1">
+    <div class="container">
+      <!-- Topics Start -->
+    <div style="margin-right: 40px; width: 500px" >
+        {% include 'base/topics_component.html' %}
+    </div>
+      <!-- Topics End -->
+
+      <!-- Room List Start -->
+      <div class="roomList">
+        <div class="profile">
+          <div class="profile__avatar">
+            <div class="avatar avatar--large active">
+            {% if profile.profile_pic %}
+              <img src="{{profile.profile_pic.url}}"/>
+            {% else %}
+              <img src="{% static 'images/avatar.svg' %}" />
+            {% endif %}
+            </div>
+          </div>
+          <div class="profile__info">
+            <h3>{{profile.name}}</h3>
+            <p>@{{user.username}}</p>
+            {% if request.user == user %}
+            <a href="{% url 'update-user' %}" class="btn btn--main btn--pill">Edit Profile</a>
+            {% endif %}
+          </div>
+          <div class="profile__about">
+            <h3>About</h3>
+            <p>
+              {{padded_bio|safe|default:"This user has not added a bio yet."}}
+            </p>
+          </div>
+        </div>
+
+        <div class="roomList__header">
+          <div>
+            <h2>Comments made by {{user.username}}</a>
+            </h2>
+          </div>
+        </div>
+        {% include 'base/comment_feed_component.html' %}
+
+      </div>
+      <!-- Room List End -->
+
+      <!-- Activities Start -->
+      <!-- Activities End -->
+    </div>
+  </main>
+</body>
+
+{% endblock content %}

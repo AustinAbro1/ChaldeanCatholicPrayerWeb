@@ -1,0 +1,74 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<style>
+    .room-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+
+<div class="room-container">
+
+    <div>
+
+        <h1>{{ room.name }}</h1>
+
+        <h1>{{ room.description }}</h1>
+        {% if room.EnglishPrayer %}
+            <p style="font-size: 0.9em; color:#000000;"><strong> English Prayer: </strong>{{room.EnglishPrayer}}</p>
+        {% endif %}
+
+        {% if room.ChaldeanPrayer %}
+            <p style="font-size: 0.9em; color:#000000;"><strong> Chaldean Prayer: </strong>{{room.ChaldeanPrayer}}</p>
+        {% endif %}
+
+
+        <div class="comment-wrapper">
+            <h3>Comments</h3>
+            <hr>
+
+            {% for comment in room_comments %}
+                <div>
+                    {% if request.user == comment.user %}
+                    <a href="{% url 'delete-comment' comment.id %}">Delete</a>
+                    {% endif %}
+                    <small>
+                        @<a href = "{% url 'user-profile' comment.user.id %}">{{comment.user.username}}</a>
+                        {{ comment.created|timesince}} ago
+                    </small>
+                    <p>{{ comment.body }}</p>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Write your comment here...">
+                <button type="submit">Post</button>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div>
+        <h3>Other Rooms</h3>
+        <hr>
+        {% for other_room in other_rooms %}
+            <div>
+                <a href="{% url 'room' other_room.id %}">{{ other_room.name }}</a>
+                <p>{{ other_room.description|truncatewords:10 }}</p>
+            </div>
+        {% empty %}
+            <p>No other rooms available.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
